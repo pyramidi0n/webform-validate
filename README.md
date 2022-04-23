@@ -65,8 +65,16 @@ Or HTML5 input:
 * [html5-time](#html5-time)
 * [html5-color](#html5-color)
 
-These functions always accept at least one string parameter, and may include
-keyword parameters relevant to the type of input.
+These functions always accept at least one input string parameter, and may
+include keyword parameters relevant to the type of input.
+
+When a function fails to validate the input string, it will return at least one
+`nil`.
+
+When a function successfully validates the input string, it will return the
+input string and, depending on the type of input, additional parsed values that
+may be convenient for the calling code. For example, the `html-date` function
+will return the year, month, and day as strings.
 
 ### html-checkbox
 
