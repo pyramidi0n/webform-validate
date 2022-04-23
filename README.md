@@ -13,9 +13,9 @@ A validation library for web form input.
 
 ## Overview
 
-This library attempts to comply with the standards and MDN documentation for
-HTML and HTML5 web form input. It leverages other standards-compliant libraries
-to perform email and url validation.
+This library attempts to comply with the standards and [MDN documentation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+for HTML and HTML5 web form input. It leverages other standards-compliant
+libraries to perform email and url validation.
 
 The intended use case is for server-side validation of untrusted input strings.
 Right now, the validation is merely of syntax - the library does not provide
