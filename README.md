@@ -44,11 +44,17 @@ CL-USER> (ql:quickload :webform-validate)
 The library provides a suite of functions, each of which corresponds to a type
 of HTML or HTML5 form input:
 [html-checkbox](#html-checkbox)
+
 [html-date](#html-date)
+
 [html-file](#html-file)
+
 [html-hidden](#html-hidden)
+
 [html-password](#html-password)
+
 [html-radio](#html-radio)
+
 [html-text](#html-text)
 
 [html5-email](#html5-email)
