@@ -42,32 +42,27 @@ CL-USER> (ql:quickload :webform-validate)
 ## Usage
 
 The library provides a suite of functions, each of which corresponds to a type
-of HTML or HTML5 form input:
-[html-checkbox](#html-checkbox)
+of HTML input:
+* [html-checkbox](#html-checkbox)
+* [html-date](#html-date)
+* [html-file](#html-file)
+* [html-hidden](#html-hidden)
+* [html-password](#html-password)
+* [html-radio](#html-radio)
+* [html-text](#html-text)
 
-[html-date](#html-date)
-
-[html-file](#html-file)
-
-[html-hidden](#html-hidden)
-
-[html-password](#html-password)
-
-[html-radio](#html-radio)
-
-[html-text](#html-text)
-
-[html5-email](#html5-email)
-[html5-search](#html5-search)
-[html5-tel](#html5-tel)
-[html5-url](#html5-url)
-[html5-number](#html5-number)
-[html5-range](#html5-range)
-[html5-datetime-local](#html5-datetime-local)
-[html5-month](#html5-month)
-[html5-week](#html5-week)
-[html5-time](#html5-time)
-[html5-color](#html5-color)
+Or HTML5 input:
+* [html5-email](#html5-email)
+* [html5-search](#html5-search)
+* [html5-tel](#html5-tel)
+* [html5-url](#html5-url)
+* [html5-number](#html5-number)
+* [html5-range](#html5-range)
+* [html5-datetime-local](#html5-datetime-local)
+* [html5-month](#html5-month)
+* [html5-week](#html5-week)
+* [html5-time](#html5-time)
+* [html5-color](#html5-color)
 
 These functions always accept at least one string parameter, and may include
 keyword parameters relevant to the type of input.
