@@ -142,10 +142,11 @@
     (assert (eq (html-password "12323" :pattern-matcher #'alpha-only) nil))
     (assert (string= (html-password "foobar" :pattern-matcher #'alpha-only) "foobar"))
 
-    (assert (eq (html-password "" :min-length 1) nil))
+    (assert (eq (html-password "a" :min-length 2) nil))
     (assert (eq (html-password "foobar" :max-length 1) nil))
     (assert (string= (html-password "foobar" :min-length 1 :max-length 10) "foobar"))
 
+    (assert (eq (html-password "" :required t :min-length 1) nil))
     (assert (eq (html-password "" :required t :pattern-matcher #'alpha-only) nil))
     t))
 
@@ -170,10 +171,11 @@
     (assert (eq (html-text "12323" :pattern-matcher #'alpha-only) nil))
     (assert (string= (html-text "foobar" :pattern-matcher #'alpha-only) "foobar"))
 
-    (assert (eq (html-text "" :min-length 1) nil))
+    (assert (eq (html-text "a" :min-length 2) nil))
     (assert (eq (html-text "foobar" :max-length 1) nil))
     (assert (string= (html-text "foobar" :min-length 1 :max-length 10) "foobar"))
 
+    (assert (eq (html-text "" :required t :min-length 1) nil))
     (assert (eq (html-text "" :required t :pattern-matcher #'alpha-only) nil))
     t))
 
@@ -200,7 +202,8 @@
                             "simple"
                             "example.com"))
 
-      (assert (eq (html5-email "" :min-length 1) nil))
+      (assert (string= (html5-email "" :min-length 1) ""))
+      (assert (eq (html5-email "a" :min-length 2) nil))
       (assert (html5-email= (html5-email "simple@example.com" :min-length 1)
                             "simple@example.com"
                             "simple"
@@ -297,7 +300,8 @@
     (assert (eq (html5-search "12323" :pattern-matcher #'alpha-only) nil))
     (assert (string= (html5-search "foobar" :pattern-matcher #'alpha-only) "foobar"))
 
-    (assert (eq (html5-search "" :min-length 1) nil))
+    (assert (string= (html5-search "" :min-length 1) ""))
+    (assert (eq (html5-search "a" :min-length 2) nil))
     (assert (eq (html5-search "foobar" :max-length 1) nil))
     (assert (string= (html5-search "foobar" :min-length 1 :max-length 10) "foobar"))
 
@@ -313,11 +317,12 @@
     (assert (eq (html5-tel "" :required t) nil))
     (assert (string= (html5-tel "000-000-0000" :required t) "000-000-0000"))
 
-    (assert (eq  (html5-tel "" :pattern-matcher #'exact-match) nil))
+    (assert (eq  (html5-tel "" :pattern-matcher #'exact-match) ""))
     (assert (eq (html5-tel "foobar" :pattern-matcher #'exact-match) nil))
     (assert (string= (html5-tel "000-000-0000" :pattern-matcher #'exact-match) "000-000-0000"))
 
-    (assert (eq (html5-tel "" :min-length 1) nil))
+    (assert (string= (html5-tel "" :min-length 1) ""))
+    (assert (eq (html5-tel "a" :min-length 2) nil))
     (assert (eq (html5-tel "000-000-0000" :max-length 1) nil))
     (assert (string= (html5-tel "000-000-0000" :min-length 1 :max-length 20) "000-000-0000"))
 

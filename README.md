@@ -228,11 +228,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned.
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match.
 
 ### html-radio
 
@@ -295,11 +297,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned.
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match.
 
 ### html5-email
 
@@ -338,11 +342,13 @@ nil, nil.
 When REQUIRED is specified, will reject an empty STR as invalid.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid.
+invalid. When REQUIRED is not specified, will treat an empty STR as a successful
+match.
 
 When MULTIPLE is t, expects STR to be a comma-separated list of email addresses.
 Will validate each, sequentially, and return a list of lists. Each list within
@@ -386,11 +392,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned.
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match.
 
 ### html5-tel
 
@@ -426,11 +434,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned.
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match.
 
 ### html5-url
 
@@ -467,11 +477,13 @@ Otherwise returns nil, nil, nil, nil, nil, nil, nil, nil.
 When REQUIRED is specified, will reject an empty STR as invalid.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid.
+invalid. When REQUIRED is not specified, will treat an empty STR as a successful
+match.
 
 ### html5-number
 

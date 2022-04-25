@@ -167,7 +167,8 @@ year YYYY*, otherwise returns nil."
          (day-upper-bound (case mm-i
                             ((1 3 5 7 8 10 12) 31)
                             (2 (if (leap-year-p yyyy*) 29 28))
-                            ((4 6 9 11) 30)))
+                            ((4 6 9 11) 30)
+                            (t 0)))
          (dd-i (parse-integer day-string)))
     (when (and (>= dd-i 1)
                (<= dd-i day-upper-bound))
@@ -353,8 +354,7 @@ more recent than T1. Otherwise returns nil."
 ;; ------------------------------------------------------------------------------
 
 (declaim (ftype (function (string &key
-                                  (:required boolean)
-                                  (:expected-value string))
+                                  (:required boolean))
                           (or string null))
                 html-checkbox))
 
@@ -371,7 +371,8 @@ more recent than T1. Otherwise returns nil."
 
 (declaim (ftype (function (string &key
                                   (:required boolean)
-                                  (:accept string))
+                                  (:accept string)
+                                  (:multiple boolean))
                           (or string null))
                 html-file))
 
@@ -673,11 +674,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned."
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/password#value
   ;;
   ;; Password input behaves identically to text input for the purpose of
@@ -746,16 +749,19 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned."
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/text#value
   (flet ((valid-text ()
-           (when (and (if min-length (>= (length str) min-length) t)
-                      (if max-length (<= (length str) max-length) t)
-                      (if pattern-matcher (funcall pattern-matcher str) t))
+           (when (or (and (not required) (string= str ""))
+                     (and (if min-length (>= (length str) min-length) t)
+                          (if max-length (<= (length str) max-length) t)
+                          (if pattern-matcher (funcall pattern-matcher str) t)))
              str)))
     (if required
         (when (not (string= str ""))
@@ -801,11 +807,13 @@ nil, nil.
 When REQUIRED is specified, will reject an empty STR as invalid.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid.
+invalid. When REQUIRED is not specified, will treat an empty STR as a successful
+match.
 
 When MULTIPLE is t, expects STR to be a comma-separated list of email addresses.
 Will validate each, sequentially, and return a list of lists. Each list within
@@ -816,20 +824,26 @@ nil or not specified, any STR containing multiple email addresses will not
 pass validation."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email#value
   (labels ((valid-email ()
-             (when (and (if min-length (>= (length str) min-length) t)
-                        (if max-length (<= (length str) max-length) t)
-                        (if pattern-matcher (funcall pattern-matcher str) t))
+             (when (or (and (not required) (string= str ""))
+                       (and (if min-length (>= (length str) min-length) t)
+                            (if max-length (<= (length str) max-length) t)
+                            (if pattern-matcher (funcall pattern-matcher str) t)))
                (if (string= str "")
-                   (values "" nil nil)
+                   (return-from valid-email (values "" nil nil))
                    (multiple-value-bind (local-part domain)
                        (email-parse:parse str)
                      (when local-part
-                       (values str local-part domain))))))
+                       (return-from valid-email (values str local-part domain))))))
+             (values nil nil nil))
            (valid-emails ()
              (mapcar (lambda (email)
                        (when (and (if min-length (>= (length email) min-length) t)
                                   (if max-length (<= (length email) max-length) t)
-                                  (if pattern-matcher (funcall pattern-matcher email) t))
+                                  (if pattern-matcher
+                                      (if (and (not required) (string= str ""))
+                                          t
+                                          (funcall pattern-matcher email))
+                                      t))
                          (multiple-value-bind (local-part domain)
                              (email-parse:parse email)
                            (when local-part
@@ -875,11 +889,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned."
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/search#value
   ;;
   ;; Search input behaves identically to text input for the purpose of
@@ -919,11 +935,13 @@ depending on whether STR is valid.
 When REQUIRED is specified, will reject an empty STR as invalid and return nil.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid and nil is returned."
+invalid and nil is returned. When REQUIRED is not specified, will treat an
+empty STR as a successful match."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/tel#value
   ;;
   ;; Tel input behaves identically to text input for the purpose of
@@ -968,18 +986,21 @@ Otherwise returns nil, nil, nil, nil, nil, nil, nil, nil.
 When REQUIRED is specified, will reject an empty STR as invalid.
 
 When MIN-LENGTH or MAX-LENGTH are specified, will reject any STR with a length
-that is not at least MIN-LENGTH and at most MAX-LENGTH.
+that is not at least MIN-LENGTH and at most MAX-LENGTH. When REQUIRED is not
+specified, will not test MIN-LENGTH or MAX-LENGTH against an empty string STR.
 
 A PATTERN-MATCHER is a predicate of one string argument that will be matched
 against STR during validation; when its result is nil, STR is rejected as
-invalid."
+invalid. When REQUIRED is not specified, will treat an empty STR as a successful
+match."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/url#value
   (labels ((valid-url ()
-             (when (and (if min-length (>= (length str) min-length) t)
-                        (if max-length (<= (length str) max-length) t)
-                        (if pattern-matcher (funcall pattern-matcher str) t))
+             (when (or (and (not required) (string= str ""))
+                       (and (if min-length (>= (length str) min-length) t)
+                            (if max-length (<= (length str) max-length) t)
+                            (if pattern-matcher (funcall pattern-matcher str) t)))
                (if (string= str "")
-                   (values "" nil nil nil nil nil nil nil)
+                   (return-from valid-url (values "" nil nil nil nil nil nil nil))
                    (multiple-value-bind (scheme
                                          userinfo
                                          host
@@ -992,14 +1013,16 @@ invalid."
                      ;; constitutes an absolute URL/URI. Nevertheless, this
                      ;; should confirm those of the format urlscheme://restofurl.
                      (when scheme
-                       (values str
-                               scheme
-                               userinfo
-                               host
-                               port
-                               path
-                               query
-                               fragment)))))))
+                       (return-from valid-url
+                         (values str
+                                 scheme
+                                 userinfo
+                                 host
+                                 port
+                                 path
+                                 query
+                                 fragment))))))
+             (values nil nil nil nil nil nil nil nil)))
     (if required
         (if (string= str "")
             (values nil nil nil nil nil nil nil nil)
@@ -1356,15 +1379,23 @@ When REQUIRED is specified, will reject an empty STR as invalid.
 When MIN or MAX are specified, will reject any STR with a time value
 that, chronologically, is not at least MIN and at most MAX."
   ;; https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/time#time_value_format
-  (cond ((and min max) (when (and (time>= str min)
-                                  (time<= str max))
-                         (return-from html5-time (validate-time str))))
-        (min (when (time>= str min)
-               (return-from html5-time (validate-time str))))
-        (max (when (time<= str max)
-               (return-from html5-time (validate-time str))))
-        (t (return-from html5-time (validate-time str))))
-  (values nil nil nil nil))
+  (flet ((valid-time ()
+           (cond ((and min max) (when (and (time>= str min)
+                                           (time<= str max))
+                                  (return-from valid-time (validate-time str))))
+                 (min (when (time>= str min)
+                        (return-from valid-time (validate-time str))))
+                 (max (when (time<= str max)
+                        (return-from valid-time (validate-time str))))
+                 (t (return-from valid-time (validate-time str))))
+           (values nil nil nil nil)))
+    (if required
+        (if (string= str "")
+            (values nil nil nil nil)
+            (valid-time))
+        (if (string= str "")
+            (values "" nil nil nil)
+            (valid-time)))))
 
 (defun html5-color (str)
   "Function html5-color
