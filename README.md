@@ -34,7 +34,7 @@ Add the Ultralisp repository:
 CL-USER> (ql-dist:install-dist "http://dist.ultralisp.org/")
 ```
 
-Install Email Parse:
+Install Webform Validate:
 
 ```lisp
 CL-USER> (ql:quickload :webform-validate)
